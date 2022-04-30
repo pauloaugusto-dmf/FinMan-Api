@@ -27,7 +27,7 @@ Devise.setup do |config|
   config.mailer_sender = 'please-change-me-at-config-initializers-devise@example.com'
 
   config.jwt do |jwt|
-    jwt.secret = Rails.application.credentials.devise[:jwt_secret_key]
+    jwt.secret = ENV['DEVISE_JWT_SECRET_KEY'] || 'teste'
     #jwt.dispatch_requests = [
     #  ['POST', %r{^/sign_in$}]
     #]
