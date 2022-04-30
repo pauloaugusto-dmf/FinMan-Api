@@ -19,10 +19,20 @@ gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 
 group :development, :test do
   gem 'debug', platforms: %i[mri mingw x64_mingw]
-  gem 'rails_best_practices', '~> 1.23', '>= 1.23.1', require: false
-  gem 'rubocop', '~> 1.27', require: false
+  gem 'factory_bot_rails', '~> 6.2'
+  gem 'faker', '~> 2.20'
+  gem 'rspec-rails', '~> 5.1'
 end
 
 group :development do
   # gem "spring"
+  gem 'letter_opener', '~> 1.8'
+  gem 'rails_best_practices', '~> 1.23', '>= 1.23.1', require: false
+  gem 'rubocop', '~> 1.27', require: false
+end
+
+group :test do
+  gem 'database_cleaner-active_record', '~> 2.0'
+  gem 'shoulda-matchers', '~> 5.1'
+  gem 'simplecov', '~> 0.21.2', require: false
 end
