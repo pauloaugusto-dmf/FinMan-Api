@@ -28,13 +28,13 @@ Devise.setup do |config|
 
   config.jwt do |jwt|
     jwt.secret = Rails.application.credentials.devise[:jwt_secret_key]
-    jwt.dispatch_requests = [
-      ['POST', %r{^/sign_in$}]
-    ]
-    jwt.revocation_requests = [
-      ['DELETE', %r{^/sign_out$}]
-    ]
-    jwt.expiration_time = 15.day.to_i
+    #jwt.dispatch_requests = [
+    #  ['POST', %r{^/sign_in$}]
+    #]
+    #jwt.revocation_requests = [
+    #  ['DELETE', %r{^/sign_out$}]
+    #]
+    #jwt.expiration_time = 15.day.to_i
   end
 
   # Configure the class responsible to send e-mails.

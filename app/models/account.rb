@@ -3,6 +3,6 @@ class Account < ApplicationRecord
 
   with_options presence: true do
     validates :name
-    validates :balance
+    validates :balance, numericality: true
   end
 end
