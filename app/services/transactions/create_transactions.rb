@@ -1,5 +1,5 @@
 module Transactions
-  class NewTransactions < ApplicationService
+  class CreateTransactions < ApplicationService
     def initialize(account, params)
       @account = account
       @params = params
@@ -7,7 +7,7 @@ module Transactions
     end
 
     def call
-      @transaction = new_transaction
+      @transaction = create_transaction
 
       if @transaction.save
         Result.new(true, @transaction) if add_account_balance
@@ -19,7 +19,7 @@ module Transactions
 
     private
 
-    def new_transaction
+    def create_transaction
       Transaction.new(transaction_params)
     end
 

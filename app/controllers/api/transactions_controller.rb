@@ -16,7 +16,7 @@ module Api
 
     # POST /transactions
     def create
-      result = Transactions::NewTransactions.call(@account, transaction_params)
+      result = Transactions::CreateTransactions.call(@account, transaction_params)
 
       if result.success?
         render json: result.data, status: :created
