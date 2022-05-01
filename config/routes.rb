@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  resources :accounts
+  
   devise_for :users,
              controllers: {
                  sessions: 'users/sessions',
@@ -7,6 +7,13 @@ Rails.application.routes.draw do
              }
 
   namespace :api, defaults: { format: :json } do
-    resources :accounts
+    resources :accounts do
+      post 'transaction', to: 'transactions#create'
+      get 'transaction/:id', to: 'transactions#show'
+      get 'transaction', to: 'transactions#index'
+      put 'transaction/:id', to: 'transactions#update'
+      delete 'transaction/:id', to: 'transactions#destroy'
+    end
+    resources :transactions
   end
 end
