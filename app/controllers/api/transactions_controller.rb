@@ -41,7 +41,7 @@ module Api
       result = Transactions::DestroyTransactions.call(params[:id], @account)
 
       if result.success?
-        render json: result.data
+        render status: :no_content
       else
         render json: { error: result.error }, status: :unprocessable_entity
       end
