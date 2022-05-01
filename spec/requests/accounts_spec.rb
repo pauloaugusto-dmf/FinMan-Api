@@ -128,12 +128,7 @@ RSpec.describe '/accounts', type: :request do
 
   describe 'DELETE /destroy' do
     before do
-      delete "/api/accounts/#{account.id}",
-             params: {
-               account: {
-                 name: nil
-               }
-             }, headers: authenticate_headers(user), as: :json
+      delete "/api/accounts/#{account.id}", headers: authenticate_headers(user), as: :json
     end
 
     it 'renders a successful response' do
