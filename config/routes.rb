@@ -12,8 +12,8 @@ Rails.application.routes.draw do
       get 'transaction/:id', to: 'transactions#show'
       get 'transaction', to: 'transactions#index'
       patch 'transaction/:id', to: 'transactions#update'
+      put 'transaction/:id', to: 'transactions#update'
       delete 'transaction/:id', to: 'transactions#destroy'
     end
-    resources :transactions
   end
 end
