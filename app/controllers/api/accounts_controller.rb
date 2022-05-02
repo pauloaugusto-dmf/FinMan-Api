@@ -6,22 +6,22 @@ module Api
 
     # GET /accounts
     def index
-      render json: @accounts.as_json(only: %i[name balance], include: :user)
+      render json: @accounts
     end
 
     # GET /accounts/1
     def show
-      render json: @account.as_json(only: %i[name balance], include: :user)
+      render json: @account.as_json(include: :user)
     end
 
     # POST /accounts
     def create
-      @account = current_user.accounts.new(account_params)
+      result = Accounts::CreateAccounts.call(account_params, current_user)
 
-      if @account.save
-        render json: @account, status: :created, location: api_account_url(@account)
+      if result.success?
+        render json: result.data, status: :created
       else
-        render json: @account.errors, status: :unprocessable_entity
+        render json: { error: result.error }, status: :unprocessable_entity
       end
     end
 
