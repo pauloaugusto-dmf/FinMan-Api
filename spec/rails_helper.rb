@@ -5,6 +5,7 @@ SimpleCov.start do
   add_group 'Libs', 'lib'
   add_group 'Models', 'app/models'
   add_group 'Serializers', 'app/serializers'
+  add_group 'Services', 'app/services'
   add_group 'Specs', 'spec'
 end
 

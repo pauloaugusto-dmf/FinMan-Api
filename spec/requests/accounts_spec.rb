@@ -80,6 +80,89 @@ RSpec.describe '/accounts', type: :request do
         expect(Account.count).to eq(0)
       end
     end
+
+    context 'With initial value of 500' do
+      before do
+        post '/api/accounts',
+             params: {
+               account: {
+                 name: 'nova conta',
+                 balance: 500
+               }
+             }, headers: authenticate_headers(user), as: :json
+      end
+
+      it 'must have a balance of 500' do
+        balance = Account.all.last.balance
+        expect(balance).to eq(500.0)
+      end
+
+      it 'create a new Transactions' do
+        expect(Transaction.count).to eq(1)
+      end
+    end
+
+    context 'With initial value of -500' do
+      before do
+        post '/api/accounts',
+             params: {
+               account: {
+                 name: 'nova conta',
+                 balance: -500
+               }
+             }, headers: authenticate_headers(user), as: :json
+      end
+
+      it 'must have a balance of -500' do
+        balance = Account.all.last.balance
+        expect(balance).to eq(-500.0)
+      end
+
+      it 'create a new Transaction' do
+        expect(Transaction.count).to eq(1)
+      end
+    end
+
+    context 'With initial value of 0' do
+      before do
+        post '/api/accounts',
+             params: {
+               account: {
+                 name: 'nova conta',
+                 balance: 0
+               }
+             }, headers: authenticate_headers(user), as: :json
+      end
+
+      it 'must have a balance of 0' do
+        balance = Account.all.last.balance
+        expect(balance).to eq(0)
+      end
+
+      it 'does not create a new Transactions' do
+        expect(Transaction.count).to eq(0)
+      end
+    end
+
+    context 'No initial value' do
+      before do
+        post '/api/accounts',
+             params: {
+               account: {
+                 name: 'nova conta'
+               }
+             }, headers: authenticate_headers(user), as: :json
+      end
+
+      it 'must have a balance of 0' do
+        balance = Account.all.last.balance
+        expect(balance).to eq(0)
+      end
+
+      it 'does not create a new Transactions' do
+        expect(Transaction.count).to eq(0)
+      end
+    end
   end
 
   describe 'PATCH /update' do

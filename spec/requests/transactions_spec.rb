@@ -59,6 +59,58 @@ RSpec.describe '/transactions', type: :request do
       end
     end
 
+    context 'with a transaction of 200 in an account' do
+      before do
+        post "/api/accounts/#{account.id}/transaction",
+             params: {
+               transaction: {
+                 value: 200
+               }
+             }, headers: authenticate_headers(user), as: :json
+      end
+
+      it 'the account must have a balance of 200' do
+        ac = Account.find(account.id)
+        expect(ac.balance.to_f).to eq(200)
+      end
+    end
+
+    context 'With a transaction of 200 on an account with a balance of 500' do
+      before do
+        account.balance = 500
+        account.save
+        post "/api/accounts/#{account.id}/transaction",
+             params: {
+               transaction: {
+                 value: 200
+               }
+             }, headers: authenticate_headers(user), as: :json
+      end
+
+      it 'the account must have a balance of 700' do
+        ac = Account.find(account.id)
+        expect(ac.balance.to_f).to eq(700)
+      end
+    end
+
+    context 'With a transaction of -200 on an account with a balance of 500' do
+      before do
+        account.balance = 500
+        account.save
+        post "/api/accounts/#{account.id}/transaction",
+             params: {
+               transaction: {
+                 value: -200
+               }
+             }, headers: authenticate_headers(user), as: :json
+      end
+
+      it 'the account must have a balance of -300' do
+        ac = Account.find(account.id)
+        expect(ac.balance.to_f).to eq(300)
+      end
+    end
+
     context 'with invalid parameters' do
       context 'with invalid parameters' do
         before do
@@ -131,7 +183,8 @@ RSpec.describe '/transactions', type: :request do
 
   describe 'DELETE /destroy' do
     before do
-      delete "/api/accounts/#{account.id}/transaction/#{transaction.id}", headers: authenticate_headers(user), as: :json
+      delete "/api/accounts/#{account.id}/transaction/#{transaction.id}",
+             headers: authenticate_headers(user), as: :json
     end
 
     it 'renders a successful response' do
