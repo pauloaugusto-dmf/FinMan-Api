@@ -1,11 +1,11 @@
 Rails.application.routes.draw do
   
   devise_for :users,
-             controllers: {
-                 sessions: 'users/sessions',
-                 registrations: 'users/registrations'
-             }
-
+  controllers: {
+    sessions: 'users/sessions',
+    registrations: 'users/registrations'
+  }
+  
   namespace :api, defaults: { format: :json } do
     resources :accounts do
       post 'transaction', to: 'transactions#create'
@@ -15,5 +15,6 @@ Rails.application.routes.draw do
       put 'transaction/:id', to: 'transactions#update'
       delete 'transaction/:id', to: 'transactions#destroy'
     end
+    resources :tags
   end
 end
