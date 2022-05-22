@@ -19,7 +19,7 @@ module Api
       @tag = Tag.new(tag_params)
 
       if @tag.save
-        render json: @tag, status: :created, location: @tag
+        render json: @tag, status: :created, location: api_tags_url(@tag)
       else
         render json: @tag.errors, status: :unprocessable_entity
       end
