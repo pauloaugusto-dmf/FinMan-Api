@@ -30,3 +30,6 @@
 
 # SimpleCov
 /coverage
+
+# RubyMine
+/.idea
