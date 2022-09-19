@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_05_15_021618) do
+ActiveRecord::Schema[7.0].define(version: 2022_09_18_235308) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -21,6 +21,35 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_15_021618) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_accounts_on_user_id"
+  end
+
+  create_table "debts", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "description"
+    t.decimal "value", default: "0.0", null: false
+    t.datetime "date"
+    t.boolean "is_installments", null: false
+    t.integer "installments"
+    t.bigint "tags_id"
+    t.bigint "accounts_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["accounts_id"], name: "index_debts_on_accounts_id"
+    t.index ["tags_id"], name: "index_debts_on_tags_id"
+  end
+
+  create_table "incomes", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "description"
+    t.decimal "value", default: "0.0", null: false
+    t.datetime "date"
+    t.boolean "continuous", null: false
+    t.bigint "tags_id"
+    t.bigint "accounts_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["accounts_id"], name: "index_incomes_on_accounts_id"
+    t.index ["tags_id"], name: "index_incomes_on_tags_id"
   end
 
   create_table "jwt_denylist", force: :cascade do |t|
@@ -40,7 +69,10 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_15_021618) do
     t.bigint "account_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "typeable_type"
+    t.bigint "typeable_id"
     t.index ["account_id"], name: "index_transactions_on_account_id"
+    t.index ["typeable_type", "typeable_id"], name: "index_transactions_on_typeable"
   end
 
   create_table "users", force: :cascade do |t|
@@ -57,5 +89,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_15_021618) do
   end
 
   add_foreign_key "accounts", "users"
+  add_foreign_key "debts", "accounts", column: "accounts_id"
+  add_foreign_key "debts", "tags", column: "tags_id"
+  add_foreign_key "incomes", "accounts", column: "accounts_id"
+  add_foreign_key "incomes", "tags", column: "tags_id"
   add_foreign_key "transactions", "accounts"
 end
