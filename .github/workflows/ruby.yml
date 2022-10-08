@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 env:
-  RUBY_VERSION: 3.0.0
+  RUBY_VERSION: 3.1.2
   POSTGRES_USER: postgres
   POSTGRES_PASSWORD: postgres
   POSTGRES_DB: FinMan_Api_test
