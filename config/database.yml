@@ -1,6 +1,11 @@
 default: &default
   adapter: postgresql
   encoding: unicode
+  <% if ENV['POSTGRESQL_CONTAINER'].present? %>
+  host: db
+  username: postgres
+  password: password
+  <% end %>
   
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 
