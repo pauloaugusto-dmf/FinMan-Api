@@ -31,6 +31,7 @@ group :development do
   gem 'letter_opener', '~> 1.8'
   gem 'rails_best_practices', '~> 1.23', '>= 1.23.1', require: false
   gem 'rubocop', '~> 1.27', require: false
+  gem "annotate", "~> 3.2"
 end
 
 group :test do
@@ -38,3 +39,4 @@ group :test do
   gem 'shoulda-matchers', '~> 5.1'
   gem 'simplecov', '~> 0.21.2', require: false
 end
+
