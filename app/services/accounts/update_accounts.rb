@@ -1,6 +1,5 @@
 module Accounts
   class UpdateAccounts < ApplicationService
-    include ActiveModel::Validations
 
     validate :balance_present?
 

@@ -1,6 +1,5 @@
 module Accounts
   class CreateAccounts < ApplicationService
-    include ActiveModel::Validations
 
     def initialize(params, current_user)
       @params = params
