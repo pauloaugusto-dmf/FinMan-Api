@@ -23,25 +23,7 @@ RSpec.describe '/checking_accounts', type: :request do
 
   describe 'POST /create' do
     context 'with valid parameters' do
-      it 'creates a new CheckingAccount' do
-        expect do
-          post '/api/checking_accounts/',
-               params: {
-                 checking_account: {
-                   account_number: '2312',
-                   agency: '23424',
-                   monthly_fee: 7.50,
-                   account_attributes: {
-                     active: true,
-                     balance: 100.00,
-                     name: 'nubank'
-                   }
-                 }
-               }, headers: authenticate_headers(user), as: :json
-        end.to change(CheckingAccount, :count).by(1)
-      end
-
-      it 'renders a JSON response with the new checking_account' do
+      before do
         post '/api/checking_accounts/',
              params: {
                checking_account: {
@@ -55,31 +37,25 @@ RSpec.describe '/checking_accounts', type: :request do
                  }
                }
              }, headers: authenticate_headers(user), as: :json
+      end
+
+      it 'renders a successful response' do
+        expect(response).to be_successful
+      end
+
+      it 'creates a new CheckingAccount and new Account' do
+        expect(Account.count).to eq(1)
+        expect(CheckingAccount.count).to eq(1)
+      end
+
+      it 'renders a JSON response with the new checking_account' do
         expect(response).to have_http_status(:created)
         expect(response.content_type).to match(a_string_including('application/json'))
       end
     end
 
     context 'with invalid parameters' do
-      it 'does not create a new CheckingAccount' do
-        expect do
-          post '/api/checking_accounts/',
-               params: {
-                 checking_account: {
-                   account_number: '2312',
-                   agency: '23424',
-                   monthly_fee: 7.50,
-                   account_attributes: {
-                     active: true,
-                     balance: '100.00',
-                     name: 'nubank'
-                   }
-                 }
-               }, headers: authenticate_headers(user), as: :json
-        end.to change(CheckingAccount, :count).by(0)
-      end
-
-      it 'renders a JSON response with errors for the new checking_account' do
+      before do
         post '/api/checking_accounts/',
              params: {
                checking_account: {
@@ -93,8 +69,54 @@ RSpec.describe '/checking_accounts', type: :request do
                  }
                }
              }, headers: authenticate_headers(user), as: :json
+      end
+
+      it 'does not create a new CheckingAccount' do
+        expect(Account.count).to eq(0)
+        expect(CheckingAccount.count).to eq(0)
+      end
+
+      it 'renders a JSON response with errors for the new checking_account' do
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to match(a_string_including('application/json'))
+      end
+    end
+
+    context 'after creating a current account when trying to create a new one with the same agency value' do
+      it 'must be valid if the account numbers are different' do
+        post '/api/checking_accounts/',
+             params: {
+               checking_account: {
+                 account_number: checking_account.account_number,
+                 agency: '54321',
+                 monthly_fee: 7.50,
+                 account_attributes: {
+                   active: true,
+                   balance: 100.00,
+                   name: 'nubank'
+                 }
+               }
+             }, headers: authenticate_headers(user), as: :json
+
+        expect(response).to have_http_status(:created)
+      end
+
+      it 'must not be valid if the account numbers are the same' do
+        post '/api/checking_accounts/',
+             params: {
+               checking_account: {
+                 account_number: checking_account.account_number,
+                 agency: checking_account.agency,
+                 monthly_fee: 7.50,
+                 account_attributes: {
+                   active: true,
+                   balance: 100.00,
+                   name: 'nubank'
+                 }
+               }
+             }, headers: authenticate_headers(user), as: :json
+
+        expect(response).to have_http_status(:unprocessable_entity)
       end
     end
   end

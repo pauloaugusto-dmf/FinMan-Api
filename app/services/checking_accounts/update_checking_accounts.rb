@@ -1,6 +1,5 @@
 module CheckingAccounts
   class UpdateCheckingAccounts < ApplicationService
-
     def initialize(params, current_user, checking_account)
       @params = params
       @current_user = current_user

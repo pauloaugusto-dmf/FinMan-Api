@@ -21,5 +21,9 @@
 class CheckingAccount < ApplicationRecord
   belongs_to :account
 
-  accepts_nested_attributes_for :account
+  with_options presence: true do
+    validates :agency, format: { with: /\A\d+\z/ }
+    validates :account_number, format: { with: /\A\d+\z/ }, uniqueness: { scope: :agency }
+    validates :monthly_fee, numericality: { greater_than_or_equal_to: 0 }
+  end
 end

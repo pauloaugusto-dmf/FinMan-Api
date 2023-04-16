@@ -1,5 +1,6 @@
 module Accounts
   class CreateAccounts < ApplicationService
+    validate :valid_balance?
 
     def initialize(params, current_user)
       @params = params
@@ -9,7 +10,7 @@ module Accounts
     def call
       @account = create_account
 
-      if valid_parameters? && @account.save
+      if valid? && @account.save
         create_transaction(@account, transaction_params) if opening_balance?
         Result.new(true, @account)
       else
@@ -28,26 +29,13 @@ module Accounts
     end
 
     def opening_balance?
-      @params[:balance].present? && !@params[:balance].zero?
+      @params[:balance].present? && !@params[:balance].to_f.zero?
     end
 
-    def valid_parameters?
-      if @params[:balance].present?
-        return true if integer?(@params[:balance]) || float?(@params[:balance])
+    def valid_balance?
+      return unless @params[:balance].present?
 
-        @account.errors.add(:balance, 'invalid parameters for balance')
-        return false
-      end
-
-      true
-    end
-
-    def float?(value)
-      value.instance_of?(Float)
-    end
-
-    def integer?(value)
-      value.instance_of?(Integer)
+      errors.add(:balance, 'invalid parameters for balance') unless @params[:balance].is_a?(Numeric)
     end
 
     def account_params

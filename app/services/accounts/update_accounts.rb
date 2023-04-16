@@ -1,6 +1,5 @@
 module Accounts
   class UpdateAccounts < ApplicationService
-
     validate :balance_present?
 
     def initialize(params, current_user, account)

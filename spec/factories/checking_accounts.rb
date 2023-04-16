@@ -20,9 +20,9 @@
 #
 FactoryBot.define do
   factory :checking_account do
-    account_number { 'MyString' }
-    monthly_fee { '9.99' }
-    agency { 'MyString' }
+    account_number { Faker::Number.number(digits: 10) }
+    monthly_fee { Faker::Number.decimal(l_digits: 2) }
+    agency { Faker::Number.number(digits: 4) }
     account
   end
 end
