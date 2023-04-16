@@ -11,11 +11,10 @@ module Transactions
       @transaction = set_transaction
       sub_account_balance
 
+      add_account_balance
       if @transaction.update(transaction_params)
-        add_account_balance
         Result.new(true, @transaction)
       else
-        add_account_balance
         @errors << @transaction.errors.full_messages
         Result.new(false, nil, @errors.join(','))
       end

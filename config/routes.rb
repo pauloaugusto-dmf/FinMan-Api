@@ -15,6 +15,7 @@ Rails.application.routes.draw do
       put 'transaction/:id', to: 'transactions#update'
       delete 'transaction/:id', to: 'transactions#destroy'
     end
+    resources :checking_accounts
     resources :tags
     resources :incomes
     resources :debts

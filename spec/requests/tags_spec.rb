@@ -87,11 +87,11 @@ RSpec.describe '/tags', type: :request do
       it 'renders a successful response' do
         expect(response).to be_successful
       end
-  
+
       it 'returns 204, no content' do
         expect(response.status).to eq(204)
       end
-  
+
       it 'destroys the requested transaction' do
         expect(Tag.count).to eq(0)
       end

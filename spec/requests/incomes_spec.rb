@@ -68,15 +68,15 @@ RSpec.describe '/incomes', type: :request do
       before do
         post '/api/incomes',
              params: {
-              income: {
-                name: 'salario',
-                description: 'salario recebido',
-                value: 'mil',
-                date: '03/11/2022',
-                continuous: true,
-                accounts_id: account.id,
-                tags: tag
-              }
+               income: {
+                 name: 'salario',
+                 description: 'salario recebido',
+                 value: 'mil',
+                 date: '03/11/2022',
+                 continuous: true,
+                 accounts_id: account.id,
+                 tags: tag
+               }
              }, headers: authenticate_headers(user), as: :json
       end
 

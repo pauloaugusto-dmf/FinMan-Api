@@ -3,6 +3,7 @@
 # Table name: accounts
 #
 #  id         :bigint           not null, primary key
+#  active     :boolean          default(FALSE), not null
 #  balance    :decimal(, )      default(0.0), not null
 #  name       :string           not null
 #  created_at :datetime         not null
@@ -21,6 +22,7 @@ FactoryBot.define do
   factory :account do
     name { Faker::Name.initials }
     balance { 0 }
-    association :user_id, strategy: :build
+    active { false }
+    user
   end
 end

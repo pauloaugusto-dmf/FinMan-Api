@@ -3,7 +3,6 @@ module Api
     before_action :set_income, only: %i[show update destroy]
     before_action :set_incomes, only: %i[index]
 
-
     # GET /incomes
     def index
       @incomes = Income.all
@@ -52,7 +51,8 @@ module Api
     end
 
     def income_params
-      params.require(:income).permit(:name, :description, :value, :date, :continuous, :accounts_id, :tags_id)
+      params.require(:income).permit(:name, :description, :value, :date, :continuous, :accounts_id,
+                                     :tags_id)
     end
   end
 end
