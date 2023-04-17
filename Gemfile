@@ -17,6 +17,7 @@ gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 # gem "image_processing", "~> 1.2"
 gem 'devise'
 gem 'devise-jwt'
+gem 'logging', '~> 2.3'
 gem 'rack-cors'
 
 group :development, :test do
@@ -40,4 +41,3 @@ group :test do
   gem 'shoulda-matchers', '~> 5.1'
   gem 'simplecov', '~> 0.21.2', require: false
 end
-
