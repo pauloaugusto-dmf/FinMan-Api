@@ -11,7 +11,7 @@ module Api
 
     # GET /checking_accounts/1
     def show
-      render json: @checking_account
+      render json: @checking_account.as_json(include: :account)
     end
 
     # POST /checking_accounts
@@ -19,7 +19,7 @@ module Api
       result = CheckingAccounts::CreateCheckingAccounts.call(checking_account_params, current_user)
 
       if result.success?
-        render json: result.data, status: :created
+        render json: result.data.as_json(include: :account), status: :created
       else
         render json: { error: result.error }, status: :unprocessable_entity
       end
@@ -30,7 +30,7 @@ module Api
       result = CheckingAccounts::UpdateCheckingAccounts.call(checking_account_params, current_user, @checking_account)
 
       if result.success?
-        render json: result.data, status: :ok
+        render json: result.data.as_json(include: :account), status: :ok
       else
         render json: { error: result.error }, status: :unprocessable_entity
       end
