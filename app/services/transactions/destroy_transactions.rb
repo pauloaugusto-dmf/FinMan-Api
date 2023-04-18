@@ -1,19 +1,28 @@
+require 'logging'
+
 module Transactions
   class DestroyTransactions < ApplicationService
     def initialize(id, account)
       @id = id
       @account = account
       @errors = []
+      @logger = Logging.logger['DestroyTransaction']
     end
 
     def call
       @transaction = set_transaction
       sub_account_balance
 
-      return Result.new(true) if @transaction.destroy
+      transaction_id = @transaction.id
+
+      if @transaction.destroy
+        @logger.info "Transaction #{transaction_id} destroyed"
+        return Result.new(true)
+      end 
 
       add_account_balance
       @errors << @transaction.errors.full_messages
+      @logger.error "Failed to destroy transactiom: #{@errors.as_json}"
       Result.new(false, nil, @errors.join(','))
     end
 

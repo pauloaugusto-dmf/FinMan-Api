@@ -1,3 +1,5 @@
+require 'logging'
+
 module Transactions
   class UpdateTransactions < ApplicationService
     def initialize(id, account, params)
@@ -5,6 +7,7 @@ module Transactions
       @params = params
       @account = account
       @errors = []
+      @logger = Logging.logger['UpdateTransaction']
     end
 
     def call
@@ -13,9 +16,11 @@ module Transactions
 
       add_account_balance
       if @transaction.update(transaction_params)
+        @logger.info "Transaction #{@transaction.id} updated"
         Result.new(true, @transaction)
       else
         @errors << @transaction.errors.full_messages
+        @logger.error "Failed to update transaction: #{@errors.as_json}"
         Result.new(false, nil, @errors.join(','))
       end
     end
