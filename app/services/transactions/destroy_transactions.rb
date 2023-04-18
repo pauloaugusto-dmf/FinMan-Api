@@ -33,11 +33,11 @@ module Transactions
     end
 
     def add_account_balance
-      AccountOperations::AddAccountBalance.call(@transaction, @account)
+      Accounts::AccountsOperations::AddAccountBalance.call(@transaction.value, @account)
     end
 
     def sub_account_balance
-      AccountOperations::SubAccountBalance.call(@transaction, @account)
+      Accounts::AccountsOperations::SubAccountBalance.call(@transaction.value, @account)
     end
 
     def transaction_params
