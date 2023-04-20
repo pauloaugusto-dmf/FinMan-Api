@@ -2,7 +2,8 @@ require 'rails_helper'
 
 RSpec.describe '/checking_accounts', type: :request do
   let(:user) { create :user }
-  let(:checking_account) { create :checking_account }
+  let(:account) { create :account, user: user }
+  let(:checking_account) { create :checking_account, account: account }
 
   describe 'GET /index' do
     it 'renders a successful response' do

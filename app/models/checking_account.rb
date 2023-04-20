@@ -20,6 +20,7 @@
 #
 class CheckingAccount < ApplicationRecord
   belongs_to :account
+  has_one :user, through: :account
 
   with_options presence: true do
     validates :agency, format: { with: /\A\d+\z/ }

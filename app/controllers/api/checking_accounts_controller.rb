@@ -1,11 +1,12 @@
 module Api
   class CheckingAccountsController < ApplicationController
+    # before_action :authorize_user!
     before_action :set_checking_account, only: %i[show update destroy]
+    before_action :set_checking_accounts, only: %i[index]
+    before_action -> { authorize_user(CheckingAccount) }, only: %i[show update destroy]
 
     # GET /checking_accounts
     def index
-      @checking_accounts = CheckingAccount.all
-
       render json: @checking_accounts
     end
 
@@ -46,6 +47,10 @@ module Api
     # Use callbacks to share common setup or constraints between actions.
     def set_checking_account
       @checking_account = CheckingAccount.find(params[:id])
+    end
+
+    def set_checking_accounts
+      @checking_accounts = CheckingAccount.joins(:account).where(accounts: { user_id: current_user.id })
     end
 
     # Only allow a list of trusted parameters through.
