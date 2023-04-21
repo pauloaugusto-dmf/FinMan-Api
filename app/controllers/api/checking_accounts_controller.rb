@@ -7,6 +7,10 @@ module Api
 
     # GET /checking_accounts
     def index
+      @checking_accounts = @checking_accounts
+                           .ransack(params[:q])
+                           .result(distinct: true)
+
       render json: @checking_accounts
     end
 
