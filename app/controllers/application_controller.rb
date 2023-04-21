@@ -1,4 +1,6 @@
 class ApplicationController < ActionController::API
+  include PaginationConcern
+
   def authorize_user(model)
     @model = model.find(params[:id])
     return if @model.user == current_user

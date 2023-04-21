@@ -43,3 +43,5 @@ group :test do
 end
 
 gem "ransack", "~> 4.0"
+
+gem "kaminari", "~> 1.2"

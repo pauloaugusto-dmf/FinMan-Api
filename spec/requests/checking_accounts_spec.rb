@@ -20,7 +20,7 @@ RSpec.describe '/checking_accounts', type: :request do
       checking_account_two
       get '/api/checking_accounts', headers: authenticate_headers(user_one), as: :json
 
-      account_ids = JSON.parse(response.body).map { |h| h['id'] }
+      account_ids = JSON.parse(response.body)['items'].map { |h| h['id'] }
 
       expect(account_ids.include?(checking_account_one.id)).to be_truthy
       expect(account_ids.include?(checking_account_two.id)).to be_falsey

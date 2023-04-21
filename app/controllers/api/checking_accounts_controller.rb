@@ -1,6 +1,5 @@
 module Api
   class CheckingAccountsController < ApplicationController
-    # before_action :authorize_user!
     before_action :set_checking_account, only: %i[show update destroy]
     before_action :set_checking_accounts, only: %i[index]
     before_action -> { authorize_user(CheckingAccount) }, only: %i[show update destroy]
@@ -10,8 +9,10 @@ module Api
       @checking_accounts = @checking_accounts
                            .ransack(params[:q])
                            .result(distinct: true)
+                           .page(params[:page])
+                           .per(params[:page_size])
 
-      render json: @checking_accounts
+      render json: paginated_json(@checking_accounts)
     end
 
     # GET /checking_accounts/1
