@@ -1,6 +1,4 @@
-module PaginationConcern
-  extend ActiveSupport::Concern
-
+module Pagination
   protected
 
   def paginated_json(collection, json_options: {})

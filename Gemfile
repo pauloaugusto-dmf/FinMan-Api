@@ -42,6 +42,5 @@ group :test do
   gem 'simplecov', '~> 0.21.2', require: false
 end
 
-gem "ransack", "~> 4.0"
-
-gem "kaminari", "~> 1.2"
+gem 'kaminari', '~> 1.2'
+gem 'ransack', '~> 4.0'

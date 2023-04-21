@@ -12,12 +12,12 @@ module Api
                            .page(params[:page])
                            .per(params[:page_size])
 
-      render json: paginated_json(@checking_accounts)
+      render json: CheckingAccounts::Serialize.collection_as_json(@checking_accounts)
     end
 
     # GET /checking_accounts/1
     def show
-      render json: @checking_account.as_json(include: :account)
+      render json: CheckingAccounts::Serialize.as_json(@checking_account)
     end
 
     # POST /checking_accounts
