@@ -1,24 +1,48 @@
 require 'rails_helper'
 
 RSpec.describe '/checking_accounts', type: :request do
-  let(:user) { create :user }
-  let(:account) { create :account, user: user }
-  let(:checking_account) { create :checking_account, account: account }
+  let(:user_one) { create :user }
+  let(:user_two) { create :user }
+  let(:account_one) { create :account, user: user_one }
+  let(:account_two) { create :account, user: user_two }
+  let(:checking_account_one) { create :checking_account, account: account_one }
+  let(:checking_account_two) { create :checking_account, account: account_two }
 
   describe 'GET /index' do
     it 'renders a successful response' do
-      get '/api/checking_accounts', headers: authenticate_headers(user), as: :json
+      get '/api/checking_accounts', headers: authenticate_headers(user_one), as: :json
 
       expect(response).to be_successful
+    end
+
+    it "returns only the user's checking accounts" do
+      checking_account_one
+      checking_account_two
+      get '/api/checking_accounts', headers: authenticate_headers(user_one), as: :json
+
+      account_ids = JSON.parse(response.body).map { |h| h['id'] }
+
+      expect(account_ids.include?(checking_account_one.id)).to be_truthy
+      expect(account_ids.include?(checking_account_two.id)).to be_falsey
     end
   end
 
   describe 'GET /show' do
     it 'renders a successful response' do
-      get "/api/checking_accounts/#{checking_account.id}", headers: authenticate_headers(user),
-                                                           as: :json
+      get "/api/checking_accounts/#{checking_account_one.id}", headers: authenticate_headers(user_one),
+                                                               as: :json
 
       expect(response).to be_successful
+    end
+
+    it 'returns unauthorized if the user is not the owner of the account' do
+      get "/api/checking_accounts/#{checking_account_two.id}", headers: authenticate_headers(user_one),
+                                                               as: :json
+
+      parsed_body = JSON.parse(response.body)
+
+      expect(response).to have_http_status(:unauthorized)
+      expect(parsed_body['error']).to eq('Unauthorized')
     end
   end
 
@@ -37,7 +61,7 @@ RSpec.describe '/checking_accounts', type: :request do
                    name: 'nubank'
                  }
                }
-             }, headers: authenticate_headers(user), as: :json
+             }, headers: authenticate_headers(user_one), as: :json
       end
 
       it 'renders a successful response' do
@@ -69,7 +93,7 @@ RSpec.describe '/checking_accounts', type: :request do
                    name: 'nubank'
                  }
                }
-             }, headers: authenticate_headers(user), as: :json
+             }, headers: authenticate_headers(user_one), as: :json
       end
 
       it 'does not create a new CheckingAccount' do
@@ -88,7 +112,7 @@ RSpec.describe '/checking_accounts', type: :request do
         post '/api/checking_accounts/',
              params: {
                checking_account: {
-                 account_number: checking_account.account_number,
+                 account_number: checking_account_one.account_number,
                  agency: '54321',
                  monthly_fee: 7.50,
                  account_attributes: {
@@ -97,7 +121,7 @@ RSpec.describe '/checking_accounts', type: :request do
                    name: 'nubank'
                  }
                }
-             }, headers: authenticate_headers(user), as: :json
+             }, headers: authenticate_headers(user_one), as: :json
 
         expect(response).to have_http_status(:created)
       end
@@ -106,8 +130,8 @@ RSpec.describe '/checking_accounts', type: :request do
         post '/api/checking_accounts/',
              params: {
                checking_account: {
-                 account_number: checking_account.account_number,
-                 agency: checking_account.agency,
+                 account_number: checking_account_one.account_number,
+                 agency: checking_account_one.agency,
                  monthly_fee: 7.50,
                  account_attributes: {
                    active: true,
@@ -115,7 +139,7 @@ RSpec.describe '/checking_accounts', type: :request do
                    name: 'nubank'
                  }
                }
-             }, headers: authenticate_headers(user), as: :json
+             }, headers: authenticate_headers(user_one), as: :json
 
         expect(response).to have_http_status(:unprocessable_entity)
       end
@@ -125,28 +149,28 @@ RSpec.describe '/checking_accounts', type: :request do
   describe 'PATCH /update' do
     context 'with valid parameters' do
       it 'updates the requested checking_account' do
-        patch "/api/checking_accounts/#{checking_account.id}",
+        patch "/api/checking_accounts/#{checking_account_one.id}",
               params: {
                 checking_account: {
                   account_attributes: {
                     name: 'novo nome'
                   }
                 }
-              }, headers: authenticate_headers(user), as: :json
-        checking_account.reload
+              }, headers: authenticate_headers(user_one), as: :json
+        checking_account_one.reload
 
-        expect(checking_account.account.name).to eq('novo nome')
+        expect(checking_account_one.account.name).to eq('novo nome')
       end
 
       it 'renders a JSON response with the checking_account' do
-        patch "/api/checking_accounts/#{checking_account.id}",
+        patch "/api/checking_accounts/#{checking_account_one.id}",
               params: {
                 checking_account: {
                   account_attributes: {
                     name: 'novo nome'
                   }
                 }
-              }, headers: authenticate_headers(user), as: :json
+              }, headers: authenticate_headers(user_one), as: :json
 
         expect(response).to have_http_status(:ok)
         expect(response.content_type).to match(a_string_including('application/json'))
@@ -155,36 +179,70 @@ RSpec.describe '/checking_accounts', type: :request do
 
     context 'with invalid parameters' do
       it 'renders a JSON response with errors for the checking_account' do
-        patch "/api/checking_accounts/#{checking_account.id}",
+        patch "/api/checking_accounts/#{checking_account_one.id}",
               params: {
                 checking_account: {
                   account_attributes: {
                     balance: 150.00
                   }
                 }
-              }, headers: authenticate_headers(user), as: :json
+              }, headers: authenticate_headers(user_one), as: :json
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to match(a_string_including('application/json'))
+      end
+    end
+
+    context 'with unauthorized user' do
+      it 'renders a JSON response with error for the checking_account' do
+        patch "/api/checking_accounts/#{checking_account_one.id}",
+              params: {
+                checking_account: {
+                  account_attributes: {
+                    name: 'novo nome'
+                  }
+                }
+              }, headers: authenticate_headers(user_two), as: :json
+
+        checking_account_one.reload
+        parsed_body = JSON.parse(response.body)
+
+        expect(checking_account_one.account.name).not_to eq('novo nome')
+        expect(response).to have_http_status(:unauthorized)
+        expect(parsed_body['error']).to eq('Unauthorized')
       end
     end
   end
 
   describe 'DELETE /destroy' do
-    before do
-      delete "/api/checking_accounts/#{checking_account.id}", headers: authenticate_headers(user),
-                                                              as: :json
+    context 'with authorized user' do
+      before do
+        delete "/api/checking_accounts/#{checking_account_one.id}", headers: authenticate_headers(user_one),
+                                                                    as: :json
+      end
+
+      it 'renders a successful response' do
+        expect(response).to be_successful
+      end
+
+      it 'returns 204, no content' do
+        expect(response.status).to eq(204)
+      end
+
+      it 'destroys the requested account' do
+        expect(CheckingAccount.count).to eq(0)
+      end
     end
 
-    it 'renders a successful response' do
-      expect(response).to be_successful
-    end
+    context 'with unauthorized user' do
+      it 'renders a JSON response with error for the checking_account' do
+        delete "/api/checking_accounts/#{checking_account_one.id}", headers: authenticate_headers(user_two),
+                                                                    as: :json
 
-    it 'returns 204, no content' do
-      expect(response.status).to eq(204)
-    end
+        parsed_body = JSON.parse(response.body)
 
-    it 'destroys the requested account' do
-      expect(CheckingAccount.count).to eq(0)
+        expect(response).to have_http_status(:unauthorized)
+        expect(parsed_body['error']).to eq('Unauthorized')
+      end
     end
   end
 end
