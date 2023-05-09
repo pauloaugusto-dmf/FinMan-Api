@@ -27,7 +27,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_13_015518) do
   create_table "checking_accounts", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.string "account_number"
-    t.decimal "monthly_fee"
+    t.decimal "monthly_fee", default: "0.0", null: false
     t.string "agency"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
