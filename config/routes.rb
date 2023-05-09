@@ -8,12 +8,7 @@ Rails.application.routes.draw do
   
   namespace :api, defaults: { format: :json } do
     resources :accounts do
-      post 'transaction', to: 'transactions#create'
-      get 'transaction/:id', to: 'transactions#show'
-      get 'transaction', to: 'transactions#index'
-      patch 'transaction/:id', to: 'transactions#update'
-      put 'transaction/:id', to: 'transactions#update'
-      delete 'transaction/:id', to: 'transactions#destroy'
+      resources :transactions
     end
     resources :checking_accounts
     resources :tags

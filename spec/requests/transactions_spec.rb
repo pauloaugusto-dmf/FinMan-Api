@@ -7,7 +7,7 @@ RSpec.describe '/transactions', type: :request do
 
   describe 'GET /index' do
     before do
-      get "/api/accounts/#{account.id}/transaction", headers: authenticate_headers(user),
+      get "/api/accounts/#{account.id}/transactions", headers: authenticate_headers(user),
                                                      as: :json
     end
 
@@ -22,7 +22,7 @@ RSpec.describe '/transactions', type: :request do
 
   describe 'GET /show' do
     before do
-      get "/api/accounts/#{account.id}/transaction/#{transaction.id}",
+      get "/api/accounts/#{account.id}/transactions/#{transaction.id}",
           headers: authenticate_headers(user), as: :json
     end
 
@@ -38,7 +38,7 @@ RSpec.describe '/transactions', type: :request do
   describe 'POST /create' do
     context 'with valid parameters' do
       before do
-        post "/api/accounts/#{account.id}/transaction",
+        post "/api/accounts/#{account.id}/transactions",
              params: {
                transaction: {
                  value: 1500.50
@@ -61,7 +61,7 @@ RSpec.describe '/transactions', type: :request do
 
     context 'with a transaction of 200 in an account' do
       before do
-        post "/api/accounts/#{account.id}/transaction",
+        post "/api/accounts/#{account.id}/transactions",
              params: {
                transaction: {
                  value: 200
@@ -79,7 +79,7 @@ RSpec.describe '/transactions', type: :request do
       before do
         account.balance = 500
         account.save
-        post "/api/accounts/#{account.id}/transaction",
+        post "/api/accounts/#{account.id}/transactions",
              params: {
                transaction: {
                  value: 200
@@ -97,7 +97,7 @@ RSpec.describe '/transactions', type: :request do
       before do
         account.balance = 500
         account.save
-        post "/api/accounts/#{account.id}/transaction",
+        post "/api/accounts/#{account.id}/transactions",
              params: {
                transaction: {
                  value: -200
@@ -114,7 +114,7 @@ RSpec.describe '/transactions', type: :request do
     context 'with invalid parameters' do
       context 'with invalid parameters' do
         before do
-          post "/api/accounts/#{account.id}/transaction",
+          post "/api/accounts/#{account.id}/transactions",
                params: {
                  transaction: {
                    value: 'A'
@@ -140,7 +140,7 @@ RSpec.describe '/transactions', type: :request do
   describe 'PATCH /update' do
     context 'with valid parameters' do
       before do
-        patch "/api/accounts/#{account.id}/transaction/#{transaction.id}",
+        patch "/api/accounts/#{account.id}/transactions/#{transaction.id}",
               params: {
                 transaction: {
                   value: 250
@@ -163,7 +163,7 @@ RSpec.describe '/transactions', type: :request do
 
     context 'with invalid parameters' do
       before do
-        patch "/api/accounts/#{account.id}/transaction/#{transaction.id}",
+        patch "/api/accounts/#{account.id}/transactions/#{transaction.id}",
               params: {
                 transaction: {
                   value: 'A'
@@ -183,7 +183,7 @@ RSpec.describe '/transactions', type: :request do
 
   describe 'DELETE /destroy' do
     before do
-      delete "/api/accounts/#{account.id}/transaction/#{transaction.id}",
+      delete "/api/accounts/#{account.id}/transactions/#{transaction.id}",
              headers: authenticate_headers(user), as: :json
     end
 
