@@ -27,7 +27,7 @@
 class Debt < ApplicationRecord
   belongs_to :tags, class_name: 'Tag', optional: true
   belongs_to :accounts, class_name: 'Account'
-  has_many :transactions, as: :typeable
+  has_many :transactions, as: :typeable, dependent: :destroy
 
   with_options presence: true do
     validates :name

@@ -7,10 +7,10 @@ module Api
     # GET /checking_accounts
     def index
       @checking_accounts = @checking_accounts
-                           .ransack(params[:q])
-                           .result(distinct: true)
-                           .page(params[:page])
-                           .per(params[:page_size])
+        .ransack(params[:q])
+        .result(distinct: true)
+        .page(params[:page])
+        .per(params[:page_size])
 
       render json: CheckingAccounts::Serialize.collection_as_json(@checking_accounts)
     end

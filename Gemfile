@@ -33,7 +33,7 @@ group :development do
   gem 'annotate', '~> 3.2'
   gem 'letter_opener', '~> 1.8'
   gem 'rails_best_practices', '~> 1.23', '>= 1.23.1', require: false
-  gem 'rubocop', '~> 1.27', require: false
+  gem 'rubocop-rails', '~> 2.19', require: false
 end
 
 group :test do

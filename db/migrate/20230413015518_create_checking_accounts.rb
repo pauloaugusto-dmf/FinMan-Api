@@ -8,5 +8,7 @@ class CreateCheckingAccounts < ActiveRecord::Migration[7.0]
 
       t.timestamps
     end
+
+    add_index :checking_accounts, [:account_number, :agency], unique: true
   end
 end

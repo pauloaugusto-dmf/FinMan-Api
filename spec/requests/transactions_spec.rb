@@ -8,7 +8,7 @@ RSpec.describe '/transactions', type: :request do
   describe 'GET /index' do
     before do
       get "/api/accounts/#{account.id}/transactions", headers: authenticate_headers(user),
-                                                     as: :json
+                                                      as: :json
     end
 
     it 'renders a successful response' do

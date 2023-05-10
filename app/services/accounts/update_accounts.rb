@@ -24,7 +24,7 @@ module Accounts
     private
 
     def balance_present?
-      return unless @params[:balance].present?
+      return if @params[:balance].blank?
 
       @logger.error 'Balance cannot be changed on update'
       errors.add(:balance, 'cannot be changed on update')

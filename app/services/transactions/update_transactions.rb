@@ -6,12 +6,12 @@ module Transactions
       @id = id
       @params = params
       @account = account
+      @transaction = set_transaction
       @errors = []
       @logger = Logging.logger['UpdateTransaction']
     end
 
     def call
-      @transaction = set_transaction
       sub_account_balance
 
       add_account_balance

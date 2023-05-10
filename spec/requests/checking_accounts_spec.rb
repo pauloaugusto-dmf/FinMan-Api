@@ -20,7 +20,7 @@ RSpec.describe '/checking_accounts', type: :request do
       checking_account_two
       get '/api/checking_accounts', headers: authenticate_headers(user_one), as: :json
 
-      account_ids = JSON.parse(response.body)['items'].map { |h| h['id'] }
+      account_ids = response.parsed_body['items'].pluck('id')
 
       expect(account_ids.include?(checking_account_one.id)).to be_truthy
       expect(account_ids.include?(checking_account_two.id)).to be_falsey
@@ -39,7 +39,7 @@ RSpec.describe '/checking_accounts', type: :request do
       get "/api/checking_accounts/#{checking_account_two.id}", headers: authenticate_headers(user_one),
                                                                as: :json
 
-      parsed_body = JSON.parse(response.body)
+      parsed_body = response.parsed_body
 
       expect(response).to have_http_status(:unauthorized)
       expect(parsed_body['error']).to eq('Unauthorized')
@@ -204,7 +204,7 @@ RSpec.describe '/checking_accounts', type: :request do
               }, headers: authenticate_headers(user_two), as: :json
 
         checking_account_one.reload
-        parsed_body = JSON.parse(response.body)
+        parsed_body = response.parsed_body
 
         expect(checking_account_one.account.name).not_to eq('novo nome')
         expect(response).to have_http_status(:unauthorized)
@@ -238,7 +238,7 @@ RSpec.describe '/checking_accounts', type: :request do
         delete "/api/checking_accounts/#{checking_account_one.id}", headers: authenticate_headers(user_two),
                                                                     as: :json
 
-        parsed_body = JSON.parse(response.body)
+        parsed_body = response.parsed_body
 
         expect(response).to have_http_status(:unauthorized)
         expect(parsed_body['error']).to eq('Unauthorized')

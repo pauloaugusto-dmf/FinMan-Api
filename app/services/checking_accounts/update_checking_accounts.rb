@@ -17,8 +17,7 @@ module CheckingAccounts
         @logger.info "Checking account #{@checking_account.id} updated"
         Result.new(true, @checking_account)
       else
-        @errors << @account.error if @account.error.present?
-        @errors << @checking_account.errors if @checking_account.errors.present?
+        add_errors
         @logger.error "Failed to update checking account: #{@errors.as_json}"
         Result.new(false, nil, @errors)
       end
@@ -27,6 +26,11 @@ module CheckingAccounts
     def checking_account_params
       @params.delete('account_attributes')
       @params
+    end
+
+    def add_errors
+      @errors << @account.error if @account.error.present?
+      @errors << @checking_account.errors if @checking_account.errors.present?
     end
   end
 end

@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# rubocop: disable Layout/LineLength
+
 # Assuming you have not yet modified this file, each configuration option below
 # is set to its default value. Note that some are commented out while others
 # are not: uncommented lines are intended to protect your configuration from
@@ -28,13 +30,13 @@ Devise.setup do |config|
 
   config.jwt do |jwt|
     jwt.secret = ENV['DEVISE_JWT_SECRET_KEY'] || 'teste'
-    #jwt.dispatch_requests = [
+    # jwt.dispatch_requests = [
     #  ['POST', %r{^/sign_in$}]
-    #]
-    #jwt.revocation_requests = [
+    # ]
+    # jwt.revocation_requests = [
     #  ['DELETE', %r{^/sign_out$}]
-    #]
-    #jwt.expiration_time = 15.day.to_i
+    # ]
+    # jwt.expiration_time = 15.day.to_i
   end
 
   # Configure the class responsible to send e-mails.
@@ -320,3 +322,5 @@ Devise.setup do |config|
   # changed. Defaults to true, so a user is signed in automatically after changing a password.
   # config.sign_in_after_change_password = true
 end
+
+# rubocop: enable Layout/LineLength

@@ -12,7 +12,8 @@
 #
 # Indexes
 #
-#  index_checking_accounts_on_account_id  (account_id)
+#  index_checking_accounts_on_account_id                 (account_id)
+#  index_checking_accounts_on_account_number_and_agency  (account_number,agency) UNIQUE
 #
 # Foreign Keys
 #

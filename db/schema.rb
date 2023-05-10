@@ -32,6 +32,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_13_015518) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["account_id"], name: "index_checking_accounts_on_account_id"
+    t.index ["account_number", "agency"], name: "index_checking_accounts_on_account_number_and_agency", unique: true
   end
 
   create_table "debts", force: :cascade do |t|

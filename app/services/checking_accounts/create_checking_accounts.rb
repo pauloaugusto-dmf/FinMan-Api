@@ -17,8 +17,7 @@ module CheckingAccounts
         @logger.info "Checking account #{@checking_account.id} created"
         Result.new(true, @checking_account)
       else
-        @errors << @account.error if @account.error.present?
-        @errors << @checking_account.errors if @checking_account.errors.present?
+        add_errors
         @logger.error "Failed to create checking account: #{@errors.as_json}"
         Result.new(false, nil, @errors)
       end
@@ -31,6 +30,11 @@ module CheckingAccounts
         agency: @params[:agency],
         monthly_fee: @params[:monthly_fee]
       }
+    end
+
+    def add_errors
+      @errors << @account.error if @account.error.present?
+      @errors << @checking_account.errors if @checking_account.errors.present?
     end
   end
 end

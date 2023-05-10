@@ -5,20 +5,19 @@ module Transactions
     def initialize(id, account)
       @id = id
       @account = account
+      @transaction = set_transaction
       @errors = []
       @logger = Logging.logger['DestroyTransaction']
     end
 
     def call
-      @transaction = set_transaction
       sub_account_balance
-
       transaction_id = @transaction.id
 
       if @transaction.destroy
         @logger.info "Transaction #{transaction_id} destroyed"
         return Result.new(true)
-      end 
+      end
 
       add_account_balance
       @errors << @transaction.errors.full_messages

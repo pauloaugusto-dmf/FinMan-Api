@@ -19,7 +19,7 @@
 #  fk_rails_...  (user_id => users.id)
 #
 class Account < ApplicationRecord
-  has_many :transactions
+  has_many :transactions, dependent: :destroy
   belongs_to :user
 
   with_options presence: true do

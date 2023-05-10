@@ -10,8 +10,7 @@ module Pagination
         prev_page: collection.prev_page,
         total: collection.total_count,
         total_pages: collection.total_pages
-      },
-      items: collection.as_json(json_options)
+      }, items: collection.as_json(json_options)
     }
   end
 end
